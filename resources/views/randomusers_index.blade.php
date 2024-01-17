@@ -3,7 +3,6 @@
 @section('content')
     <h1>Random Users</h1>
 
-    {{--    <form action="{{ route('api.randomusers') . '?results=10&format=PrettyJSON&inc=name,email,phone,location'}}" method="GET">--}}
     <form action="#" method="GET">
         @csrf
 
