@@ -67,5 +67,36 @@ class RandomUsersApiControllerTest extends TestCase
                 'country' => 'USA',
             ]
         ], $response->json());
+
+        // Sending request to API with XML format
+        $responseXml = $this->get(route('api.randomusers', [
+            'fields' => ['name', 'phone', 'email', 'location'],
+            'user_qty' => 10,
+            'format' => 'xml', // Set format to XML
+            'sort_by' => 'last',
+            'sort_order' => 'asc',
+        ]));
+
+        // Check if response OK
+        $responseXml->assertStatus(200);
+
+        // Convert XML to array for easier comparison
+        $xmlArray = simplexml_load_string($responseXml->getContent(), 'SimpleXMLElement', LIBXML_NOCDATA);
+        $jsonArray = json_decode(json_encode($xmlArray), true);
+
+        // Checking structure of response for XML
+        $this->assertArrayHasKey('numeric_0', $jsonArray);
+        $this->assertArrayHasKey('full_name', $jsonArray['numeric_0']);
+        $this->assertArrayHasKey('phone', $jsonArray['numeric_0']);
+        $this->assertArrayHasKey('email', $jsonArray['numeric_0']);
+        $this->assertArrayHasKey('country', $jsonArray['numeric_0']);
+
+        // Checking data after processing for XML
+        $this->assertEquals([
+            'full_name' => 'John Doe',
+            'phone' => '(123) 456-7890',
+            'email' => 'john.doe@example.com',
+            'country' => 'USA',
+        ], $jsonArray['numeric_0']);
     }
 }
