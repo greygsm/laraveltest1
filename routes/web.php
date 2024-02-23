@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RandomUsersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::group([], function () {
+    Route::resource('randomusers', RandomUsersController::class)->names('randomusers'); //creates CRUD
 });
